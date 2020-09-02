@@ -1,0 +1,16 @@
+{
+  "name": "service-one",
+  "version": "1.0.0",
+  "description": "Test Application for testing deployment in istio.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "Susanta Gautam",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
