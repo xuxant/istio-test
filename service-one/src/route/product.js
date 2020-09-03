@@ -20,7 +20,7 @@ const product = [{
 router.get('/', async (req, res) => {
     res.status(200).json({
         "Success": true,
-        "message": "Hello World! Welcome to store."
+        "message": "Hello World! This is the Product dummy service."
     })
 })
 

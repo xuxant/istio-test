@@ -1,0 +1,23 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: service-product
+  namespace: service
+spec:
+  host: service-product
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_CONN
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: service-store
+  namespace: service
+spec:
+  host: service-store
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_CONN

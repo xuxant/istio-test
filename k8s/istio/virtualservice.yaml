@@ -1,0 +1,54 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-service
+  namespace: service
+spec:
+  hosts:
+  - "demo.service.com"
+  gateways:
+  - service-gateway
+  http:
+  - match:
+      - uri:
+          prefix: "/product"
+ 
+    route:
+      - destination:
+          host: service-product
+          port:
+            number: 5000
+  - match:
+      - uri:
+          prefix: "/store"
+    route:
+      - destination:
+          host: service-store
+          port:
+            number: 5000
+
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: gateway-service
+#   namespace: istio-system
+# spec:
+#   hosts:
+#   - "demo.service.com"
+#   gateways:
+#   - service-gateway
+#   http:
+#   - match:
+#       - uri:
+#           prefix: "/product"
+ 
+#     route:
+#       - destination:
+#           host: service-one.service-one.svc.cluster.local
+#   - match:
+#       - uri:
+#           prefix: "/store"
+#     route:
+#       - destination:
+#           host: service-two.service-two.svc.cluster.local

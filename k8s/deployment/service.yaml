@@ -1,0 +1,33 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-product
+  namespace: service
+  labels:
+    app: product
+    service: service-product
+spec:
+  type: ClusterIP
+  selector:
+    app: product
+  ports:
+    - name: tcp
+      port: 5000
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-store
+  namespace: service
+  labels:
+    app: store
+    service: service-store
+spec:
+  type: ClusterIP
+  selector:
+    app: store
+  ports:
+    - name: tcp
+      port: 5000
