@@ -9,23 +9,23 @@ spec:
     istio: ingressgateway
   servers:
     - hosts:
-        - "*"
+        - domain.example.com
 
       port:
         number: 80
         name: http
         protocol: HTTP
-      # tls:
-      #   httpsRedirect: true
+      tls:
+        httpsRedirect: true
 
-    # - hosts:
-    #     - "*"
+    - hosts:
+        - domain.example.com
 
-    #   port:
-    #     number: 443
-    #     name: https
-    #     protocol: HTTPS
+      port:
+        number: 443
+        name: https
+        protocol: HTTPS
 
-    #   tls:
-    #     mode: SIMPLE
-    #     credentialName: ingress-tls-cert
+      tls:
+        mode: SIMPLE
+        credentialName: ingress-tls-cert
