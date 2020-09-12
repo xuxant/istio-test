@@ -1,0 +1,30 @@
+{{- if .Values.istio.enabled -}}
+{{- $fullName := include "services.fullname" . -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: demo-virtualservice
+spec:
+  hosts:
+    - {{ .Values.istio.host }}
+  gateways:
+    - service-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/product"
+      route:
+        - destination:
+            host: service-one
+            port:
+              number: {{ .Values.service_one.port }}
+    
+    - match:
+        - uri:
+            prefix: "/store"
+      route:
+        - destination:
+            host: service-two
+            port:
+              number: {{ .Values.service_two.port }}
+{{- end }}

@@ -23,7 +23,54 @@ susanta@shanks:~/istio-test/service-two$ docker build -t imagename_two:tagname .
 susanta@shanks:~/istio-test/service-two$ docker push imagename_two:tagname
 ```
 
-Now Let's Deploy the application to the k8s cluster. First edit the manifest file in the k8s directory. in that directory there are following files.
+## Deploying Application using Helm
+
+There is the helm chart contained inside the helm-chart directory. First please go through [values.yaml](helm-chart/services/values.yaml) file to modify some values such as image name under image_one and image_two.
+```YAML
+image_one:
+  repository: xuxant/service-one
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+image_two:
+  repository: xuxant/service-two
+  pullPolicy: IfNotPresent
+  tag: "latest"
+```
+Please Replace the value in repository with the name you have tagged and pushed the image to your registry.
+
+Also there is another section in [values.yaml](helm-chart/services/values.yaml) file you need to consider. Please use the valid domain name and secret. Please note that the tls secret is to be created in the istio-system namespace. You can use the following command to create the secret.
+```BASH
+susanta@shanks:~/istio-test/k8s/certs$ kubectl create secret -n istio-system ingress-tls-cert tls --key=domain.key --cert=domain.crt
+```
+After you have created the secret, modify the values.yaml file with valid secret name just as below.
+```YAML
+istio:
+  enabled: true
+  annotations: {}
+  httpPort: 80
+  host: service.demo.com
+  tls:
+    enabled: true
+    httpsPort: 443 
+    credentialName: ingress-tls-cert
+```
+If in the above section, if you use the value of ```istio.tls.enabled: false``` Gateway service will configured to listen on port 80 only.
+
+Now apply the helm chart.
+```YAML
+susanta@shanks:~/istio-test$ helm install service ./helm-chart/services
+```
+The application will be deployed to the default namespace.
+
+Now you can access the application with hostname you have provided.
+```BASH
+curl -i https://service.demo.com/product
+```
+
+
+## Deploying application using manifest files.
+First edit the manifest file in the k8s directory. in that directory there are following files.
 
 File to create the namespace for deploying the service. [namespace.yaml](k8s/deployment/namespace.yaml) This manifest will create the namespace in kubernetes cluster to which we will deploy our services. Please use the following steps to deploy the application.
 
@@ -92,3 +139,4 @@ spec:
 ```
 
 In the above manifest, it is the code of the gateway manifest. While configuring the service, please replace the domain name in hosts section from above. Also, `credentialName` key is the representation of the tls secret you have created. If you have other secret configured, please feel free to replace them.
+
